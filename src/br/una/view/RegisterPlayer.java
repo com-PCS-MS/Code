@@ -1,12 +1,20 @@
 package br.una.view;
 
+import br.una.askgame.Personagem;
+import br.una.data.DB;
 import javax.swing.JOptionPane;
 
-
 public class RegisterPlayer extends javax.swing.JFrame {
+    
+    Personagem personagem;
 
     public RegisterPlayer() {
         initComponents();
+    }
+    
+    public RegisterPlayer(Personagem personagem) {
+        initComponents();
+        this.personagem = personagem;
     }
 
     @SuppressWarnings("unchecked")
@@ -93,9 +101,10 @@ public class RegisterPlayer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCadastrarMouseClicked
+        personagem.setNome(txtPersonagem.getText());
         JOptionPane.showMessageDialog(
             null,
-            "",
+            DB.criarPersonagem(personagem),
             "AskGame",
             JOptionPane.INFORMATION_MESSAGE
         );

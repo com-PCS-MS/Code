@@ -1,15 +1,9 @@
 package br.una.view;
 
-import java.awt.Image;
+import br.una.askgame.Usuario;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import br.una.data.DB;
 import javax.swing.JOptionPane;
 
@@ -137,9 +131,10 @@ public class Login1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnEntrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEntrarMouseClicked
-        if(DB.login(txtUser.getText(), txtSenha.getText())){
-            Login2 login = new Login2(txtUser.getText(), txtSenha.getText());
-            login.setVisible(true);
+        Usuario user = new Usuario(txtUser.getText(), txtSenha.getText());
+        if(DB.login(user)){            
+            ChoosePlayer1 next = new ChoosePlayer1(new Usuario(DB.getUserId(user), txtUser.getText(), txtSenha.getText()));
+            next.setVisible(true);
             super.dispose();
         } else{
             JOptionPane.showMessageDialog(

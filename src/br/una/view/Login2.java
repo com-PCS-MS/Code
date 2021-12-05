@@ -1,15 +1,9 @@
 package br.una.view;
 
-import java.awt.Image;
+import br.una.askgame.Usuario;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import br.una.data.DB;
 import javax.swing.JOptionPane;
 
@@ -153,8 +147,8 @@ public class Login2 extends javax.swing.JFrame {
                 "Erro",
                 JOptionPane.ERROR_MESSAGE
             );
-        } else if(DB.login(txtUser.getText(), txtSenha.getText())){
-            ListPlayers list = new ListPlayers();
+        } else if(DB.login(new Usuario(txtUser.getText(), txtSenha.getText()))){
+            ChoosePlayer2 list = new ChoosePlayer2();
             list.setVisible(true);
             super.dispose();            
         } else{
