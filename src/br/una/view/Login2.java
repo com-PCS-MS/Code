@@ -1,5 +1,6 @@
 package br.una.view;
 
+import br.una.askgame.Personagem;
 import br.una.askgame.Usuario;
 import java.awt.Toolkit;
 import java.util.logging.Level;
@@ -8,18 +9,18 @@ import br.una.data.DB;
 import javax.swing.JOptionPane;
 
 public class Login2 extends javax.swing.JFrame {
-    
-    private String user;
-    private String pass;
+
+    private Usuario user1;
+    private Personagem personagem1;
     
     public Login2(){
         initComponents();
     }
 
-    public Login2(String user, String pass){
+    public Login2(Usuario user1, Personagem personagem1){
         initComponents();
-        this.user = user;
-        this.pass = pass;
+        this.user1 = user1;
+        this.personagem1 = personagem1;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -140,15 +141,16 @@ public class Login2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnEntrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEntrarMouseClicked
-        if(user.equals(txtUser.getText()) && pass.equals(txtSenha.getText())){
+        Usuario userTemp = new Usuario(txtUser.getText(), txtSenha.getText());
+        if(user1.getUsuario().equals(txtUser.getText()) && user1.getSenha().equals(txtSenha.getText())){
             JOptionPane.showMessageDialog(
                 null,
                 "Você não pode usar as mesmas credenciais do player 1.",
                 "Erro",
                 JOptionPane.ERROR_MESSAGE
             );
-        } else if(DB.login(new Usuario(txtUser.getText(), txtSenha.getText()))){
-            ChoosePlayer2 list = new ChoosePlayer2();
+        } else if(DB.login(userTemp)){
+            ChoosePlayer2 list = new ChoosePlayer2(user1, new Usuario(DB.getUserId(userTemp), txtUser.getText(), txtSenha.getText()), personagem1);
             list.setVisible(true);
             super.dispose();            
         } else{

@@ -1,20 +1,26 @@
 package br.una.view;
 
+import br.una.askgame.Personagem;
 import br.una.askgame.Usuario;
 import br.una.data.DB;
 import java.awt.Toolkit;
 
 public class ChoosePlayer2 extends javax.swing.JFrame {
     
-    Usuario user;
+    Usuario user1;
+    Usuario user2;
+    Personagem personagem1;
+    Personagem personagem2 = new Personagem();
 
     public ChoosePlayer2() {
         initComponents();
     }
     
-    public ChoosePlayer2(Usuario user) {
+    public ChoosePlayer2(Usuario user1, Usuario user2, Personagem personagem1) {
         initComponents();
-        this.user = user;
+        this.user1 = user1;
+        this.user2 = user2;
+        this.personagem1 = personagem1;
     }
 
     @SuppressWarnings("unchecked")
@@ -37,7 +43,7 @@ public class ChoosePlayer2 extends javax.swing.JFrame {
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/una/img/Ask_Game_1.png"))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel1.setText("Jogador 1, escolha seu personagem.");
+        jLabel1.setText("Jogador 2, escolha seu personagem.");
 
         btnCadastrar.setText("Cadastrar");
         btnCadastrar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -59,6 +65,11 @@ public class ChoosePlayer2 extends javax.swing.JFrame {
         jScrollPane1.setViewportView(listPersonagens);
 
         btnSelecionar.setText("Selecionar");
+        btnSelecionar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSelecionarMouseClicked(evt);
+            }
+        });
 
         btnAtualizar.setText("Atualizar listagem");
         btnAtualizar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -114,7 +125,8 @@ public class ChoosePlayer2 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCadastrarMouseClicked
-        
+        RegisterPlayer registerPlayer = new RegisterPlayer(new Personagem(user2.getId()));
+        registerPlayer.setVisible(true);
     }//GEN-LAST:event_btnCadastrarMouseClicked
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
@@ -122,8 +134,16 @@ public class ChoosePlayer2 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
-        listPersonagens.setModel(DB.listaPersonagens(user));
+        listPersonagens.setModel(DB.listaPersonagens(user2));
     }//GEN-LAST:event_btnAtualizarMouseClicked
+
+    private void btnSelecionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelecionarMouseClicked
+        personagem2.setNome(listPersonagens.getSelectedValue());
+        personagem2.setId(DB.getPersonagemId(personagem2, user2));
+        Game game = new Game(DB.iniciarPartida(user1, user2, personagem1, personagem2));
+        game.setVisible(true);
+        super.dispose();
+    }//GEN-LAST:event_btnSelecionarMouseClicked
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -153,10 +173,6 @@ public class ChoosePlayer2 extends javax.swing.JFrame {
                 new ChoosePlayer2().setVisible(true);                
             }
         });
-    }
-    
-    private void setList(){
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

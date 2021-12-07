@@ -192,6 +192,29 @@ public class DB {
         return id;
     }
     
+    public static int getPersonagemId(Personagem personagem, Usuario user){
+        String query = "SELECT P.id FROM personagem AS P, usuario AS U WHERE P.nome=? AND U.usuario=? AND U.id=P.id_usuario";
+       
+        PreparedStatement stmt;
+        int id=0;
+        try {
+            stmt = DB.conectar().prepareStatement(query);
+            stmt.setString (1, personagem.getNome());       
+            stmt.setString (2, user.getUsuario());
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                id = rs.getInt("id");
+            }            
+            
+            DB.fecharConexao();
+            
+            return id;
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+    
     public static DefaultListModel listaPersonagens(Usuario user){
         
         DefaultListModel model = new DefaultListModel();        
@@ -205,7 +228,7 @@ public class DB {
             ResultSet rs = stmt.executeQuery();
             int i=0;
             while(rs.next()){
-                model.add(i, rs.getString("nome")+" (vida: "+rs.getString("vida")+")");
+                model.add(i, rs.getString("nome"));
                 i++;
             }            
             
@@ -222,5 +245,37 @@ public class DB {
         
         model.add(1, "Você ainda não possui nenhum personagem.");
         return model;
+    }
+    
+    public static int iniciarPartida(Usuario user1, Usuario user2, Personagem personagem1, Personagem personagem2){
+        // Retorna o id da partida
+        String query = "INSERT INTO partida(id_jogador1, id_jogador2, id_personagem1, id_personagem2, ativo, criada_em)"
+                + " VALUES (?, ?, ?, ?, 1, NOW())";
+        PreparedStatement stmt, stmt2;
+        int id = 0;
+        try {
+            stmt = DB.conectar().prepareStatement(query);
+
+            stmt.setInt(1, user1.getId());
+            stmt.setInt(2, user2.getId());
+            stmt.setInt(3, personagem1.getId());
+            stmt.setInt(4, personagem2.getId());
+
+            if(stmt.execute()){
+                String query2 = "SELECT id FROM partida ORDER BY id DESC LIMIT 1";
+                stmt2 = DB.conectar().prepareStatement(query2);
+                ResultSet rs = stmt2.executeQuery();
+                while(rs.next()){
+                    id = rs.getInt("id");
+                }                
+            }
+            
+            DB.fecharConexao();
+
+            return id;
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }         
+        return id;
     }
 }

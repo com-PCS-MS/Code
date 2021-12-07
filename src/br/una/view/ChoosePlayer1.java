@@ -7,15 +7,16 @@ import java.awt.Toolkit;
 
 public class ChoosePlayer1 extends javax.swing.JFrame {
     
-    Usuario user;
+    Usuario user1;
+    Personagem personagem1 = new Personagem();
 
     public ChoosePlayer1() {
         initComponents();
     }
     
-    public ChoosePlayer1(Usuario user) {
+    public ChoosePlayer1(Usuario user1) {
         initComponents();
-        this.user = user;
+        this.user1 = user1;
     }
 
     @SuppressWarnings("unchecked")
@@ -60,6 +61,11 @@ public class ChoosePlayer1 extends javax.swing.JFrame {
         jScrollPane1.setViewportView(listPersonagens);
 
         btnSelecionar.setText("Selecionar");
+        btnSelecionar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSelecionarMouseClicked(evt);
+            }
+        });
 
         btnAtualizar.setText("Atualizar listagem");
         btnAtualizar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -115,7 +121,7 @@ public class ChoosePlayer1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCadastrarMouseClicked
-        RegisterPlayer registerPlayer = new RegisterPlayer(new Personagem(user.getId()));
+        RegisterPlayer registerPlayer = new RegisterPlayer(new Personagem(user1.getId()));
         registerPlayer.setVisible(true);
     }//GEN-LAST:event_btnCadastrarMouseClicked
 
@@ -124,8 +130,16 @@ public class ChoosePlayer1 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
-        listPersonagens.setModel(DB.listaPersonagens(user));
+        listPersonagens.setModel(DB.listaPersonagens(user1));
     }//GEN-LAST:event_btnAtualizarMouseClicked
+
+    private void btnSelecionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelecionarMouseClicked
+        personagem1.setNome(listPersonagens.getSelectedValue());
+        personagem1.setId(DB.getPersonagemId(personagem1, user1));
+        Login2 login = new Login2(user1, personagem1);
+        login.setVisible(true);
+        super.dispose();
+    }//GEN-LAST:event_btnSelecionarMouseClicked
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -153,10 +167,6 @@ public class ChoosePlayer1 extends javax.swing.JFrame {
                 new ChoosePlayer1().setVisible(true);                
             }
         });
-    }
-    
-    private void setList(){
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
