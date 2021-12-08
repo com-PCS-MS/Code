@@ -4,6 +4,9 @@ import br.una.askgame.Personagem;
 import br.una.askgame.Usuario;
 import br.una.data.DB;
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javazoom.jl.decoder.JavaLayerException;
 
 public class ChoosePlayer2 extends javax.swing.JFrame {
     
@@ -140,8 +143,13 @@ public class ChoosePlayer2 extends javax.swing.JFrame {
     private void btnSelecionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelecionarMouseClicked
         personagem2.setNome(listPersonagens.getSelectedValue());
         personagem2.setId(DB.getPersonagemId(personagem2, user2));
-        Game game = new Game(DB.iniciarPartida(user1, user2, personagem1, personagem2));
-        game.setVisible(true);
+        Game game;
+        try {
+            game = new Game(DB.iniciarPartida(user1, user2, personagem1, personagem2));
+            game.setVisible(true);
+        } catch (JavaLayerException ex) {
+            Logger.getLogger(ChoosePlayer2.class.getName()).log(Level.SEVERE, null, ex);
+        }        
         super.dispose();
     }//GEN-LAST:event_btnSelecionarMouseClicked
 

@@ -1,5 +1,7 @@
 package br.una.data;
 
+import br.una.askgame.Alternativa;
+import br.una.askgame.Pergunta;
 import br.una.askgame.Personagem;
 import br.una.askgame.Usuario;
 import java.sql.Connection;
@@ -7,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -29,8 +32,8 @@ public class DB {
             String username = "u109624496_admin_ask_game";        
             String password = "Askgame@123";      
 
-            //connection = DriverManager.getConnection(url, username, password);
-            connection = DriverManager.getConnection(urlLocal, usernameLocal, passwordLocal);
+            connection = DriverManager.getConnection(url, username, password);
+            //connection = DriverManager.getConnection(urlLocal, usernameLocal, passwordLocal);
 
             if (connection != null) {
                 status = ("Conectado com sucesso!");
@@ -277,5 +280,40 @@ public class DB {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }         
         return id;
+    }
+    
+    public static ArrayList<Pergunta> getPerguntas(){
+    
+        ArrayList<Pergunta> perguntas = new ArrayList<>();
+        
+        String query = "SELECT * FROM pergunta ORDER BY id ASC";
+               
+        PreparedStatement stmt;
+        try {
+            stmt = DB.conectar().prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()){              
+                perguntas.add(
+                    new Pergunta(
+                        rs.getInt("id"),
+                        rs.getString("resposta_certa"),
+                        rs.getString("enunciado"), 
+                        new Alternativa(rs.getString("alternativa_a")),
+                        new Alternativa(rs.getString("alternativa_b")),
+                        new Alternativa(rs.getString("alternativa_c")),
+                        new Alternativa(rs.getString("alternativa_d"))
+                    )
+                );                 
+            }            
+            
+            DB.fecharConexao();
+            
+            return perguntas;
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        
+        return null;
     }
 }
