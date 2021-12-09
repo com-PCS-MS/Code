@@ -4,9 +4,11 @@ import br.una.askgame.Personagem;
 import br.una.askgame.Usuario;
 import br.una.data.DB;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javazoom.jl.decoder.JavaLayerException;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class ChoosePlayer2 extends javax.swing.JFrame {
     
@@ -143,13 +145,15 @@ public class ChoosePlayer2 extends javax.swing.JFrame {
     private void btnSelecionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelecionarMouseClicked
         personagem2.setNome(listPersonagens.getSelectedValue());
         personagem2.setId(DB.getPersonagemId(personagem2, user2));
+        personagem2.setVida(DB.getVidaPersonagem(personagem2, user2));   
         Game game;
         try {
-            game = new Game(DB.iniciarPartida(user1, user2, personagem1, personagem2));
+            game = new Game(DB.iniciarPartida(user1, user2, personagem1, personagem2), personagem1, personagem2);
             game.setVisible(true);
-        } catch (JavaLayerException ex) {
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
             Logger.getLogger(ChoosePlayer2.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
+        
         super.dispose();
     }//GEN-LAST:event_btnSelecionarMouseClicked
 

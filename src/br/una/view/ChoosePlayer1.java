@@ -136,6 +136,7 @@ public class ChoosePlayer1 extends javax.swing.JFrame {
     private void btnSelecionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSelecionarMouseClicked
         personagem1.setNome(listPersonagens.getSelectedValue());
         personagem1.setId(DB.getPersonagemId(personagem1, user1));
+        personagem1.setVida(DB.getVidaPersonagem(personagem1, user1));        
         Login2 login = new Login2(user1, personagem1);
         login.setVisible(true);
         super.dispose();

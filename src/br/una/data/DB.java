@@ -32,8 +32,8 @@ public class DB {
             String username = "u109624496_admin_ask_game";        
             String password = "Askgame@123";      
 
-            connection = DriverManager.getConnection(url, username, password);
-            //connection = DriverManager.getConnection(urlLocal, usernameLocal, passwordLocal);
+            //connection = DriverManager.getConnection(url, username, password);
+            connection = DriverManager.getConnection(urlLocal, usernameLocal, passwordLocal);
 
             if (connection != null) {
                 status = ("Conectado com sucesso!");
@@ -116,7 +116,6 @@ public class DB {
     private static boolean verificarUsuario(Usuario user){
         String query = "SELECT usuario FROM usuario WHERE usuario=?";
        
-        String teste = user.getUsuario();
         PreparedStatement stmt;
         try {
             stmt = DB.conectar().prepareStatement(query);
@@ -216,6 +215,29 @@ public class DB {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return id;
+    }
+    
+    public static int getVidaPersonagem(Personagem personagem, Usuario user){
+        String query = "SELECT P.vida FROM personagem AS P, usuario AS U WHERE P.nome=? AND U.usuario=? AND U.id=P.id_usuario";
+       
+        PreparedStatement stmt;
+        int vida=0;
+        try {
+            stmt = DB.conectar().prepareStatement(query);
+            stmt.setString (1, personagem.getNome());       
+            stmt.setString (2, user.getUsuario());
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                vida = rs.getInt("vida");
+            }            
+            
+            DB.fecharConexao();
+            
+            return vida;
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return vida;
     }
     
     public static DefaultListModel listaPersonagens(Usuario user){
